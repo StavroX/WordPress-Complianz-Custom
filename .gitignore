@@ -1,0 +1,52 @@
+# Playwright artifacts
+.playwright-mcp/
+
+# Node modules and dependencies
+node_modules/
+npm-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+desktop.ini
+
+# Compiled and generated files
+*.min.css
+*.min.js
+dist/
+build/
+
+# Cache
+.cache/
+tmp/
+temp/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+logs/
+
+# Misc
+*.lock
