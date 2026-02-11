@@ -3,13 +3,13 @@
 	display: none !important;
 }
 
-/* Align logo in the middle */
-.cmplz-logo {
+/* Consent & Privacy - Align logo in the middle */
+.cmplz-cookiebanner .cmplz-logo {
 	grid-column-start: 2;;
 }
 
-/* Improve consent banner logo styling */
-.cmplz-logo img {
+/* Consent & Privacy - Improve consent banner logo styling */
+.cmplz-cookiebanner .cmplz-logo img {
 	 border-radius: unset;
     max-width: 100%;
     max-height: 100% !important;
@@ -19,7 +19,7 @@
     height: 65px;
 }
 
-/* Style the consent banner title */
-.cmplz-title {
+/* Consent & Privacy - Style the consent banner title */
+.cmplz-cookiebanner .cmplz-title {
 	display: none;
 }

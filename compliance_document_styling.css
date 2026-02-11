@@ -1,0 +1,37 @@
+#cmplz-document h2 {
+  line-height: 1rem;
+  margin-top: 25px;
+  margin-bottom: 14px;
+}
+
+/* titles in complianz documents */
+#cmplz-document h2.annex {}
+
+/* Subttles in complianz documents */
+#cmplz-document .cmplz-subtitle {
+    margin-top: 15px;
+}
+
+/* titles in annexes */
+#cmplz-document .subtitle.annex {}
+
+/* subtitles in annexes */
+#cmplz-document,
+#cmplz-document p,
+#cmplz-document span,
+#cmplz-document li {margin: 0;}
+
+/* text */
+#cmplz-cookies-overview .cmplz-service-header {}
+
+/* service header in cookie policy */
+#cmplz-cookies-overview .cmplz-service-desc {}
+
+/* service description */
+#cmplz-document.impressum,
+#cmplz-document.cookie-statement #cmplz-document.privacy-statement {}
+
+/* styles for impressum */
+#cmplz-document a {
+  font-size: 14px;
+}

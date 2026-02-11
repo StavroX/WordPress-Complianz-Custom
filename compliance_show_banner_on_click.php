@@ -28,6 +28,41 @@ function compliance_show_banner_on_click() {
                 });
             }
         });
+
+		// Conditionally override Leadbooster z-index only when consent banner is visible
+		function updateLeadboosterZIndex() {
+			const leadbooster = document.getElementById('LeadboosterContainer');
+			const banner = document.querySelector('.cmplz-cookiebanner');
+			
+			if (leadbooster && banner) {
+				const bannerVisible = banner.offsetParent !== null || window.getComputedStyle(banner).display !== 'none';
+				if (bannerVisible) {
+					// Banner is visible - lower Leadbooster z-index
+					leadbooster.style.setProperty('z-index', '10', 'important');
+				} else {
+					// Banner is hidden - remove our z-index override
+					leadbooster.style.zIndex = '';
+				}
+			}
+		}
+		
+		// Monitor for banner visibility changes
+		const observer = new MutationObserver(() => {
+			updateLeadboosterZIndex();
+		});
+		
+		if (document.body) {
+			observer.observe(document.body, {
+				childList: true,
+				subtree: true,
+				attributes: true,
+				attributeFilter: ['style', 'class']
+			});
+		}
+		
+		// Also check when document is ready and periodically
+		setTimeout(() => updateLeadboosterZIndex(), 100);
+		setInterval(() => updateLeadboosterZIndex(), 500);
 	</script>
 	<?php
 }
