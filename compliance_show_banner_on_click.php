@@ -13,9 +13,10 @@ function compliance_show_banner_on_click() {
             });
         }
         // For elements with class 'compliance-show-cookie-banner'
-        addEvent('click', '.compliance-show-cookie-banner', function(){
+        addEvent('click', '.compliance-show-cookie-banner', function(e){
             document.querySelectorAll('.cmplz-manage-consent').forEach(obj => {
                 obj.click();
+				e.preventDefault();
             });
         });
 		// For elements where we can't set a class. Now based on 'Cookie-instellingen' - handles both <a> and <span>
