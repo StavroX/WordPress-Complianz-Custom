@@ -30,6 +30,10 @@ function compliance_show_banner_on_click() {
             }
         });
 
+		/*
+		* For LeadBooster only
+		* This script ensures that when the consent banner is visible, the LeadBooster container is sent to the back (lower z-index) so it doesn't cover the banner. When the banner is hidden, it removes the z-index override to allow LeadBooster to function normally.
+		*/
 		// Conditionally override Leadbooster z-index only when consent banner is visible
 		function updateLeadboosterZIndex() {
 			const leadbooster = document.getElementById('LeadboosterContainer');
@@ -46,7 +50,6 @@ function compliance_show_banner_on_click() {
 				}
 			}
 		}
-		
 		// Monitor for banner visibility changes
 		const observer = new MutationObserver(() => {
 			updateLeadboosterZIndex();
@@ -64,6 +67,8 @@ function compliance_show_banner_on_click() {
 		// Also check when document is ready and periodically
 		setTimeout(() => updateLeadboosterZIndex(), 100);
 		setInterval(() => updateLeadboosterZIndex(), 500);
+		/* End of LeadBooster z-index handling */
+
 	</script>
 	<?php
 }
