@@ -28,6 +28,16 @@ function compliance_show_banner_on_click() {
 				* For LeadBooster only
 				* This script ensures that when the consent banner is visible, the LeadBooster container is sent to the back (lower z-index) so it doesn't cover the banner. When the banner is hidden, it removes the z-index override to allow LeadBooster to function normally.
 				*/
+				// Open PipeDrive LeadBooster chat when clicking .waw-open-chat elements
+				$(document).on('click', '.waw-open-chat a', function(e){
+					e.preventDefault();
+					// Check if LeadBooster is available
+					if (typeof window.LeadBooster !== 'undefined' && typeof window.LeadBooster.trigger === 'function') {
+						window.LeadBooster.trigger('open');
+					} else {
+						console.warn('LeadBooster not loaded');
+					}
+				});
 				
 				// Wait for elements to exist before initializing observer
 				function waitForElements(callback) {
@@ -53,10 +63,10 @@ function compliance_show_banner_on_click() {
 						var bannerVisible = $banner.is(':visible');
 						if (bannerVisible) {
 							// Banner is visible - lower Leadbooster z-index
-							$leadbooster.css('z-index', '10', 'important');
+							$leadbooster[0].style.setProperty('z-index', '10', 'important');
 						} else {
 							// Banner is hidden - remove our z-index override
-							$leadbooster.css('z-index', '');
+							$leadbooster[0].style.zIndex = '';
 						}
 					}
 				}
