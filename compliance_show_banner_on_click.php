@@ -5,70 +5,85 @@
 function compliance_show_banner_on_click() {
 	?>
 	<script>
-        function addEvent(event, selector, callback, context) {
-            document.addEventListener(event, e => {
-                if ( e.target.closest(selector) ) {
-                    callback(e);
-                }
-            });
-        }
-        // For elements with class 'compliance-show-cookie-banner'
-        addEvent('click', '.compliance-show-cookie-banner', function(e){
-            document.querySelectorAll('.cmplz-manage-consent').forEach(obj => {
-                obj.click();
-				e.preventDefault();
-            });
-        });
-		// For elements where we can't set a class. Now based on 'Cookie-instellingen' - handles both <a> and <span>
-        addEvent('click', 'footer a, footer span', function(e){
-            const element = e.target.closest('a, span');
-            if (element?.textContent.trim() === 'Cookie-instellingen') {
-                document.querySelectorAll('.cmplz-manage-consent').forEach(obj => {
-                    obj.click();
+		(function($) {
+			// Use jQuery's document ready for maximum compatibility
+			$(document).ready(function() {
+				
+				// Event delegation - works even if elements don't exist yet
+				// For elements with class 'compliance-show-cookie-banner'
+				$(document).on('click', '.compliance-show-cookie-banner', function(e){
 					e.preventDefault();
-                });
-            }
-        });
+					$('.cmplz-manage-consent').first().trigger('click');
+				});
+				
+				// For elements where we can't set a class. Now based on 'Cookie-instellingen' - handles both <a> and <span>
+				$(document).on('click', 'footer a, footer span', function(e){
+					if ($(this).text().trim() === 'Cookie-instellingen') {
+						e.preventDefault();
+						$('.cmplz-manage-consent').first().trigger('click');
+					}
+				});
 
-		/*
-		* For LeadBooster only
-		* This script ensures that when the consent banner is visible, the LeadBooster container is sent to the back (lower z-index) so it doesn't cover the banner. When the banner is hidden, it removes the z-index override to allow LeadBooster to function normally.
-		*/
-		// Conditionally override Leadbooster z-index only when consent banner is visible
-		function updateLeadboosterZIndex() {
-			const leadbooster = document.getElementById('LeadboosterContainer');
-			const banner = document.querySelector('.cmplz-cookiebanner');
-			
-			if (leadbooster && banner) {
-				const bannerVisible = banner.offsetParent !== null || window.getComputedStyle(banner).display !== 'none';
-				if (bannerVisible) {
-					// Banner is visible - lower Leadbooster z-index
-					leadbooster.style.setProperty('z-index', '10', 'important');
-				} else {
-					// Banner is hidden - remove our z-index override
-					leadbooster.style.zIndex = '';
+				/*
+				* For LeadBooster only
+				* This script ensures that when the consent banner is visible, the LeadBooster container is sent to the back (lower z-index) so it doesn't cover the banner. When the banner is hidden, it removes the z-index override to allow LeadBooster to function normally.
+				*/
+				
+				// Wait for elements to exist before initializing observer
+				function waitForElements(callback) {
+					var checkInterval = setInterval(function() {
+						if ($('#LeadboosterContainer').length || $('.cmplz-cookiebanner').length) {
+							clearInterval(checkInterval);
+							callback();
+						}
+					}, 100);
+					
+					// Stop checking after 10 seconds
+					setTimeout(function() {
+						clearInterval(checkInterval);
+					}, 10000);
 				}
-			}
-		}
-		// Monitor for banner visibility changes
-		const observer = new MutationObserver(() => {
-			updateLeadboosterZIndex();
-		});
-		
-		if (document.body) {
-			observer.observe(document.body, {
-				childList: true,
-				subtree: true,
-				attributes: true,
-				attributeFilter: ['style', 'class']
+				
+				// Conditionally override Leadbooster z-index only when consent banner is visible
+				function updateLeadboosterZIndex() {
+					var $leadbooster = $('#LeadboosterContainer');
+					var $banner = $('.cmplz-cookiebanner');
+					
+					if ($leadbooster.length && $banner.length) {
+						var bannerVisible = $banner.is(':visible');
+						if (bannerVisible) {
+							// Banner is visible - lower Leadbooster z-index
+							$leadbooster.css('z-index', '10', 'important');
+						} else {
+							// Banner is hidden - remove our z-index override
+							$leadbooster.css('z-index', '');
+						}
+					}
+				}
+				
+				// Initialize observer once elements exist
+				waitForElements(function() {
+					// Monitor for banner visibility changes using MutationObserver
+					var observer = new MutationObserver(function() {
+						updateLeadboosterZIndex();
+					});
+					
+					observer.observe(document.body, {
+						childList: true,
+						subtree: true,
+						attributes: true,
+						attributeFilter: ['style', 'class']
+					});
+					
+					// Initial check and periodic updates
+					updateLeadboosterZIndex();
+					setTimeout(function() { updateLeadboosterZIndex(); }, 100);
+					setInterval(function() { updateLeadboosterZIndex(); }, 500);
+				});
+				/* End of LeadBooster z-index handling */
+				
 			});
-		}
-		
-		// Also check when document is ready and periodically
-		setTimeout(() => updateLeadboosterZIndex(), 100);
-		setInterval(() => updateLeadboosterZIndex(), 500);
-		/* End of LeadBooster z-index handling */
-
+		})(jQuery);
 	</script>
 	<?php
 }
